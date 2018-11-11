@@ -1,33 +1,33 @@
-pragma solidity ^0.4.2;
+pragma solidity ^0.4.24;
 
 import "truffle/Assert.sol";
 import "truffle/DeployedAddresses.sol";
-import "../contracts/Leilao.sol";
+import "../contracts/Auction.sol";
 
-contract TestLeilao {
+contract TestAuction {
 
   address owner = 0x00c89FB22768128f06b779048ed482Bb876628D9;
 
   /***
    * Testa valor do maior lance atual em um contrato publicado na chain
    */
-  function testInitialHiggestBindingBidUsingDeployedContract() public {
-    Leilao leilao = Leilao(DeployedAddresses.Leilao());
+  function testInitialLatestBidUsingDeployedContract() public {
+    Auction leilao = Auction(DeployedAddresses.Auction());
 
     uint expected = 0;
 
-    Assert.equal(leilao.obterMaiorLanceAtual(), expected, "O lance mais alto deveria ser zero inicialmente");
+    Assert.equal(leilao.latestBid, expected, "O lance mais alto deveria ser zero inicialmente");
   }
 
   /***
    * Testa valor do maior lance atual em um contrato instanciado localmente 
    */
-  function testInitialHiggestBindingBidWithNewLeilao() public {
-    Leilao leilao = new Leilao(owner,10);
+  function testInitiaLatestBidWithNewLeilao() public {
+    Auction leilao = new Auction();
 
     uint expected = 0;
 
-    Assert.equal(leilao.obterMaiorLanceAtual(), expected, "O lance mais alto deveria ser zero inicialmente");
+    Assert.equal(leilao.latestBid, expected, "O lance mais alto deveria ser zero inicialmente");
   }
 
    /***
