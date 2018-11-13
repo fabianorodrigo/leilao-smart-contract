@@ -15,7 +15,7 @@ contract Auction {
   }
 
   function getSeller() public view returns(address){
-      return seller;
+    return seller;
   }
  
   function auction(uint bid) public {
@@ -24,7 +24,7 @@ contract Auction {
   }
  
   function bid() public payable {
-    require(msg.value > latestBid);
+    require(msg.value > latestBid, "O valor do lance deve ser maior que o último");
  
     if (latestBidder != 0x0) {
       latestBidder.transfer(latestBid);
@@ -33,12 +33,12 @@ contract Auction {
     latestBid = msg.value;
   }
  
-  function finishAuction() restricted public {
+  function finishAuction() public restricted {
     seller.transfer(address(this).balance);
   }
  
   modifier restricted() {
-    require(msg.sender == manager);
+    require(msg.sender == manager, "Somente o manager pode executar");
     _;
   }
 }
