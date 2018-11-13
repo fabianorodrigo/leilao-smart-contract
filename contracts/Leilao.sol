@@ -89,7 +89,7 @@ contract Leilao {
         }
         msg.sender.transfer(msg.value);
 
-        emit LogBid(msg.sender, novoLance, participanteMaiorLance, lanceMaisAlto, maiorLance);
+        emit LogLance(msg.sender, novoLance, participanteMaiorLance, lanceMaisAlto, maiorLance);
         return true;
     }
 
@@ -137,7 +137,7 @@ contract Leilao {
         // Envia os fundos para a conta de destino
         if (!msg.sender.send(montanteSaque)) revert("Falha ao realizar transação");
 
-        emit LogWithdrawal(msg.sender, contaSaque, montanteSaque);
+        emit LogSaque(msg.sender, contaSaque, montanteSaque);
 
         return true;
 
@@ -150,7 +150,7 @@ contract Leilao {
     returns (bool success)
     {
         cancelado = true;
-        emit LogCanceled();
+        emit LogCancelamento();
         return true;
     }
 
@@ -160,7 +160,7 @@ contract Leilao {
     returns (bool success)
     {
         finalizado = true;
-        emit LogFinished();
+        emit LogEncerramento();
         return true;
     }
 
@@ -171,8 +171,8 @@ contract Leilao {
         return b;
     }
 
-    event LogBid(address bidder, uint bid, address participanteMaiorLance, uint lanceMaisAlto, uint maiorLance);
-    event LogWithdrawal(address withdrawer, address contaSaque, uint amount);
-    event LogCanceled();
-    event LogFinished();
+    event LogLance(address participante, uint lance, address participanteMaiorLance, uint lanceMaisAlto, uint maiorLance);
+    event LogSaque(address sacador, address contaSaque, uint montante);
+    event LogCancelamento();
+    event LogEncerramento();
 }
