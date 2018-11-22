@@ -10,14 +10,6 @@ contract Auction {
     manager = msg.sender;
   }
 
-  function getLatestBid() public view returns(uint){
-    return latestBid;
-  }
-
-  function getSeller() public view returns(address){
-    return seller;
-  }
- 
   function auction(uint bid) public {
     latestBid = bid * 1 ether; //1000000000000000000;
     seller = msg.sender;
