@@ -1,4 +1,5 @@
-pragma solidity ^0.4.13;
+pragma experimental ABIEncoderV2;
+pragma solidity ^0.4.24;
 
 contract Owned {
 	address internal owner = msg.sender;
@@ -85,10 +86,10 @@ contract TokenERC20
      */
     function transferFrom(address _from, address _to, uint256 _value) public pure returns (bool) 
     {
-        // Função não é utilizada no BNDES Token
+        // Funï¿½ï¿½o nï¿½o ï¿½ utilizada no BNDES Token
         revert();
          
-        //Coloquei esse código só para não dar warning
+        //Coloquei esse cï¿½digo sï¿½ para nï¿½o dar warning
         if (_from != _to) return false;
         if (_from == _to) return false;
         if (_value == 0) return false;
@@ -105,10 +106,10 @@ contract TokenERC20
      */
     function approve(address _spender, uint256 _value) public pure returns (bool)
     {
-        // Não usada no BNDES Token ainda
+        // Nï¿½o usada no BNDES Token ainda
         revert();
 
-        //Coloquei esse código só para não dar warning
+        //Coloquei esse cï¿½digo sï¿½ para nï¿½o dar warning
         if (_spender == 0) return false;
         if (_spender != 0) return false;
         if (_value == 0) return false;
@@ -173,18 +174,18 @@ contract BNDESToken is TokenERC20 (0,"BNDESToken", "BND"), Owned
     }
 
     /**
-    Associa um endereço blockchain ao CNPJ
+    Associa um endereï¿½o blockchain ao CNPJ
     */
     function cadastra(uint _cnpj, uint _idSubcredito, uint _cnpjOrigemRepasse, bool _isRepassador) public
     { 
         address endereco = msg.sender;
 
-        // Endereço não pode ter sido cadastrado anteriormente
+        // Endereï¿½o nï¿½o pode ter sido cadastrado anteriormente
         require(pjsInfo[endereco].cnpj == 0);
 
         pjsInfo[endereco] = PJInfo(_cnpj, _idSubcredito, _cnpjOrigemRepasse, _isRepassador);
         
-        // Não pode haver outro endereço cadastrado para esse mesmo subcrédito
+        // Nï¿½o pode haver outro endereï¿½o cadastrado para esse mesmo subcrï¿½dito
         if (_idSubcredito > 0) {
             require (procuraPJInfo(_cnpj, _idSubcredito) == -1);
         }
@@ -196,13 +197,13 @@ contract BNDESToken is TokenERC20 (0,"BNDESToken", "BND"), Owned
 
     function trocaEnderecoDeCNPJSubcredito(address enderecoAntigo, address enderecoNovo, uint256 indiceEndAntigo) private
     {
-        // Aponta o novo endereço para o registro existente no mapping
+        // Aponta o novo endereï¿½o para o registro existente no mapping
         pjsInfo[enderecoNovo] = pjsInfo[enderecoAntigo];
 
-        // Apaga o mapping do endereço antigo
+        // Apaga o mapping do endereï¿½o antigo
         pjsInfo[enderecoAntigo] = PJInfo(0, 0, 0, false);
 
-        // Reusa o array de endereços, reutilizando o espaço do endereço antigo para o novo
+        // Reusa o array de endereï¿½os, reutilizando o espaï¿½o do endereï¿½o antigo para o novo
         pjsInfoEnderecos[indiceEndAntigo] = enderecoNovo;
 
         Cadastro(enderecoNovo, pjsInfo[enderecoNovo].cnpj, 
@@ -212,23 +213,23 @@ contract BNDESToken is TokenERC20 (0,"BNDESToken", "BND"), Owned
     }
 
     /**
-    Reassocia um cnpj/subcrédito a um novo endereço da blockchain (o sender)
+    Reassocia um cnpj/subcrï¿½dito a um novo endereï¿½o da blockchain (o sender)
     */
     function troca(uint _cnpj, uint _idSubcredito) public
     {
         address enderecoNovo = msg.sender;
-        // O endereço novo não pode estar sendo utilizado
+        // O endereï¿½o novo nï¿½o pode estar sendo utilizado
         require(pjsInfo[enderecoNovo].cnpj == 0);
 
-        // Tem que haver um endereço associado a esse cnpj/subcrédito
+        // Tem que haver um endereï¿½o associado a esse cnpj/subcrï¿½dito
         int256 indiceDoPJResult = procuraPJInfo(_cnpj, _idSubcredito);
         require(indiceDoPJResult != -1);
 
-        // IndiceDoPJResult pode ser negativo. IndiceDoPJ não, pois é índice de array
+        // IndiceDoPJResult pode ser negativo. IndiceDoPJ nï¿½o, pois ï¿½ ï¿½ndice de array
         uint256 indiceDoPJ = uint256(indiceDoPJResult);
         address enderecoAntigo = pjsInfoEnderecos[indiceDoPJ];
 
-        // Se há saldo no enderecoAntigo, precisa transferir
+        // Se hï¿½ saldo no enderecoAntigo, precisa transferir
         if (getBalanceOf(enderecoAntigo) > 0) {
             _transfer(enderecoAntigo, enderecoNovo, getBalanceOf(enderecoAntigo));
         }
@@ -326,7 +327,7 @@ contract BNDESToken is TokenERC20 (0,"BNDESToken", "BND"), Owned
     {
         address from = msg.sender;
 
-        // O cara não é louco de transferir para si mesmo!!!
+        // O cara nï¿½o ï¿½ louco de transferir para si mesmo!!!
         require(from != _to);
 
         // Se a origem eh o BNDES, eh uma liberacao`
@@ -338,7 +339,7 @@ contract BNDESToken is TokenERC20 (0,"BNDESToken", "BND"), Owned
             require(isCliente(_to));
 
             mintToken(_to, _value);
-            Transfer(from, _to, _value); // Evento do ERC-20 para manter o padrão na visualização da transação 
+            Transfer(from, _to, _value); // Evento do ERC-20 para manter o padrï¿½o na visualizaï¿½ï¿½o da transaï¿½ï¿½o 
             Liberacao(pjsInfo[_to].cnpj, pjsInfo[_to].idSubcredito, _value);
         }
         else
@@ -357,7 +358,7 @@ contract BNDESToken is TokenERC20 (0,"BNDESToken", "BND"), Owned
             }
             else            
             {
-                // Se nem from nem to são o Banco, eh transferencia normal
+                // Se nem from nem to sï¿½o o Banco, eh transferencia normal
 
                 // A conta de destino existe        
                 require(pjsInfo[_to].cnpj != 0);
@@ -365,13 +366,13 @@ contract BNDESToken is TokenERC20 (0,"BNDESToken", "BND"), Owned
                 // A conta de destino existe        
                 require(pjsInfo[_to].cnpj != 0);
 
-                // Verifica se é transferência para repassador
+                // Verifica se ï¿½ transferï¿½ncia para repassador
                 if (isRepassador(_to)) 
                 {
                     require(isCliente(from));
 
-                    // Garante que esse repassador é repassador do 
-                    // conjunto cliente/subcrédito
+                    // Garante que esse repassador ï¿½ repassador do 
+                    // conjunto cliente/subcrï¿½dito
                     require(isRepassadorSubcredito(_to, from));
                     Repasse(pjsInfo[from].cnpj, pjsInfo[from].idSubcredito, pjsInfo[_to].cnpj, _value);
                 }

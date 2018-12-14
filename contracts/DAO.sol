@@ -3,12 +3,12 @@ pragma solidity ^0.4.21;
 contract Ownable {
   address public owner;
 
-  function Ownable() public {
+  constructor() public {
     owner = msg.sender;
   }
 
   modifier onlyOwner() {
-    require(msg.sender == owner);
+    require(msg.sender == owner, "Somente o dono do contrato pode executar");
     _;
   }
 
