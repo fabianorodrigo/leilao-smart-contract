@@ -16,7 +16,7 @@ contract TestLeilao {
 
     uint expected = 0;
 
-    Assert.equal(leilao.obterMaiorLanceAtual(), expected, "O lance mais alto deveria ser zero inicialmente");
+    Assert.equal(leilao.maiorLance(), expected, "O lance mais alto deveria ser zero inicialmente");
   }
 
   /***
@@ -27,7 +27,7 @@ contract TestLeilao {
 
     uint expected = 0;
 
-    Assert.equal(leilao.obterMaiorLanceAtual(), expected, "O lance mais alto deveria ser zero inicialmente");
+    Assert.equal(leilao.maiorLance(), expected, "O lance mais alto deveria ser zero inicialmente");
   }
 
    /***
@@ -36,7 +36,7 @@ contract TestLeilao {
   /*function testDarLance() public payable {
     Leilao leilao = Leilao(DeployedAddresses.Leilao());
     leilao.darLance.value(17);
-    Assert.equal(leilao.obterMaiorLanceAtual(), 17, "O lance mais alto deveria ser igual a 17");
+    Assert.equal(leilao.maiorLance(), 17, "O lance mais alto deveria ser igual a 17");
   }*/
 
 }

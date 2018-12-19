@@ -20,10 +20,6 @@ contract Leilao {
     incrementoMinimo = _incrementoMinimo;
   }
 
-  function obterMaiorLanceAtual() public view returns(uint){
-    return maiorLance;
-  }
-
   modifier somenteOwner {
     if (msg.sender != owner) revert("Ação permitida somente ao Owner do Leilão");
     _;
